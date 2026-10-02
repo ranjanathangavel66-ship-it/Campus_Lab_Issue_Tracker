@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Campus Lab Issue Tracker</title>
+    <style>
+        body {
+            font-family: Arial;
+            background: #eaf2ff;
+            text-align: center;
+            padding: 20px;
+        }
+        .box {
+            background: white;
+            padding: 25px;
+            margin: auto;
+            max-width: 450px;
+            border-radius: 12px;
+        }
+        input, select, button {
+            padding: 12px;
+            margin: 8px;
+            width: 85%;
+        }
+        button {
+            background: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        li {
+            text-align: left;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="box">
+        <h2>Campus Lab Issue Tracker</h2>
+        <p>Report your lab equipment problem</p>
+
+        <input id="student" placeholder="Student Name">
+        <input id="equipment" placeholder="Equipment Name">
+
+        <select id="issue">
+            <option>Not Working</option>
+            <option>Damaged</option>
+            <option>Repair Needed</option>
+        </select>
+
+        <button onclick="addIssue()">Report Issue</button>
+
+        <h3>Reported Issues</h3>
+        <ul id="list"></ul>
+    </div>
+
+    <script>
+    function loadIssues() {
+        let issues = JSON.parse(localStorage.getItem("issues")) || [];
+        let list = document.getElementById("list");
+        list.innerHTML = "";
+
+        issues.forEach(function(item) {
+            let li = document.createElement("li");
+            li.textContent = item;
+            list.appendChild(li);
+        });
+    }
+
+    function addIssue() {
+        let name = document.getElementById("student").value;
+        let equipment = document.getElementById("equipment").value;
+        let issue = document.getElementById("issue").value;
+
+        if (name.trim() === "" || equipment.trim() === "") {
+            alert("Please fill all details");
+            return;
+        }
+
+        let newIssue = name + " - " + equipment + " - " + issue;
+
+        let issues = JSON.parse(localStorage.getItem("issues")) || [];
+        issues.push(newIssue);
+        localStorage.setItem("issues", JSON.stringify(issues));
+
+        loadIssues();
+
+        document.getElementById("student").value = "";
+        document.getElementById("equipment").value = "";
+    }
+
+    loadIssues();
+</script>
+</body>
+</html>
